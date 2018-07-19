@@ -1,0 +1,51 @@
+server:
+  port: 9302
+eureka:
+  client:
+    healthcheck:
+      enable: true
+    serviceUrl:
+      defaultZone: http://user:password123@localhost:8761/eureka
+#      defaultZone: http://eureka1:8761/eureka,http://eureka2:8762/eureka,http://eureka3:8763/eureka
+  instance:
+    hostname: localhost
+    ipAddress: localhost
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ipAddress}:${spring.application.instance_id:${server.port}}
+spring:
+  application:
+    name: stu-consumer-feign-hytrix
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8;useSSL=true
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 5
+    minIdle: 5
+    maxActive: 30
+    maxWait: 10000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMills: 300000
+    validationQuery: SELECT 1 FROM DUAL
+  session:
+    store-type: none
+#    配置ribbon
+stu-provide:
+  ribbon:
+
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule #配置规则 随机
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule #配置规则 轮询
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RetryRule #配置规则 重试
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule #配置规则 响应时间权重
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.BestAvailableRule #配置规则 最空闲连接策略
+#    ConnectTimeout: 500 #请求连接超时时间
+#    ReadTimeout: 1000 #请求处理的超时时间
+#    OkToRetryOnAllOperations: true #对所有请求都进行重试
+#    MaxAutoRetriesNextServer: 2 #切换实例的重试次数
+#    MaxAutoRetries: 1 #对当前实例的重试次数
+
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 5000
+feign:
+  hystrix:
+    enabled: true

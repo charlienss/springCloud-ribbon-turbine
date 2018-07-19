@@ -1,0 +1,46 @@
+server:
+  port: 5865
+eureka:
+  client:
+    healthcheck:
+      enable: true
+    serviceUrl:
+      defaultZone: http://user:password123@localhost:8761/eureka
+#      defaultZone: http://eureka1:8761/eureka,http://eureka2:8762/eureka,http://eureka3:8763/eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ipAddress}:${spring.application.instance_id:${server.port}}
+    hostname: localhost
+    ip-address: localhost
+
+spring:
+  thymeleaf:
+    prefix: classpath:/templates/**
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8;useSSL=true
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 5
+    minIdle: 5
+    maxActive: 30
+    maxWait: 10000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMills: 300000
+    validationQuery: SELECT 1 FROM DUAL
+  application:
+    name: stu-provide
+
+logging:
+  pattern:
+    console: "%d - %msg%n"
+  config: classpath:logback-spring.xml
+mybatis:
+  config-location: classpath:/mybatis/mybatis-config.xml
+  mapper-locations: classpath:/mapper/Student.xml
+
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 5000
+#feign:
+#  hystrix:
+#    enabled: true

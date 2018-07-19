@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration >
+
+   <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--设置控制台输出格式-->
+            <pattern>
+                <!--%d - %msg%n-->
+                %d{yyyy-MM-dd} %d{HH:mm:ss.SSS}  [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!--滚动输出，一天一个日志文件-->
+    <appender name="fileInfoLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--LevelFilter配置如果命中error就过滤掉-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>
+                <!--%d - %msg%n-->
+                %d{yyyy-MM-dd} %d{HH:mm:ss.SSS}  [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+        <!--滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--路径-->
+            <fileNamePattern>
+                /home/microserver_log/info_log/beacon-microserver-auth/beacon-microserver-auth.Info-%d.log
+            </fileNamePattern>
+            <!--设置保存最近7天的日志文件-->
+            <MaxHistory>1</MaxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!--滚动输出，一天一个日志文件-->
+    <appender name="fileErrorLog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--ThresholdFilter配置过滤，只打印ERROR日志-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <encoder>
+            <pattern>
+                <!--%d - %msg%n-->
+                %d{yyyy-MM-dd} %d{HH:mm:ss.SSS}  [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+        <!--滚动策略-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--路径-->
+            <fileNamePattern>
+                /home/microserver_log/error_log/beacon-microserver-auth/beacon-microserver-auth.Error-%d.log
+            </fileNamePattern>
+            <!--设置保存最近7天的日志文件-->
+            <MaxHistory>1</MaxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!--root配置应用于整个项目-->
+    <root level="info">
+        <!--对应上面配置的appender的name-->
+        <appender-ref ref="consoleLog" />
+        <appender-ref ref="fileInfoLog" />
+        <appender-ref ref="fileErrorLog" />
+    </root>
+
+</configuration>

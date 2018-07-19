@@ -1,0 +1,18 @@
+server:
+  port: 8031
+spring:
+  application:
+    name: stu-hystrix-turbine
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://user:password123@localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
+turbine:
+  aggregator:
+    clusterConfig: default
+  appConfig:  stu-consumer-feign-hytrix,stu-consumer
+  clusterNameExpression: "'default'"
+  instanceUrlSuffix: /hystrix.stream
+#turbine.instanceUrlSuffix=/xxx/hystrix.stream
