@@ -1,0 +1,28 @@
+server:
+  port: 8040
+spring:
+  application:
+    name: stu-zuul
+eureka:
+  client:
+    service-url:
+      defaultZone: http://user:password123@localhost:8761/eureka
+  instance:
+      prefer-ip-address: true
+      instance-id: ${spring.application.name}:${spring.cloud.client.ipAddress}:${spring.application.instance_id:${server.port}}
+      hostname: localhost
+      ip-address: localhost
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
+ribbon:
+  NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule #\u914D\u7F6E\u89C4\u5219 \u8F6E\u8BE2
+  ConnectTimeout: 3000
+  ReadTimeout: 60000
+zuul:
+  routes:
+    api-a:
+      path: /api-provider/**
+      service-id: stu-provide
+      sensitive-headers:
+    api-b:
+      path: /api-consumer/**
+      service-id: stu-consumer,stu-consumer-feign-hytrix
